@@ -12,6 +12,12 @@ function App() {
     getActors();
   }, []);
 
+  useEffect(() => {
+    if (actresses.length > 0 && actors.length > 0) {
+      setAllActors([...actresses, ...actors]);
+    }
+  }, [actresses, actors]);
+
   function getActresses() {
     axios.get("https://lanciweb.github.io/demo/api/actresses/").then((e) => {
       setActresses(e.data);
@@ -23,12 +29,6 @@ function App() {
       setActors(e.data);
     });
   }
-
-  useEffect(() => {
-    if (actresses.length > 0 && actors.length > 0) {
-      setAllActors([...actresses, ...actors]);
-    }
-  }, [actresses, actors]);
 
   return (
     <>
@@ -44,6 +44,8 @@ function App() {
               awards,
               biography,
               image,
+              most_famous_movies,
+              known_for,
             }) => (
               <Card
                 key={`${name}-${id}`}
@@ -53,6 +55,7 @@ function App() {
                 awards={awards}
                 bio={biography}
                 src={image}
+                famousMovies={most_famous_movies || known_for}
               />
             )
           )}
