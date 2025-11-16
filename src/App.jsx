@@ -6,17 +6,35 @@ function App() {
   const [actresses, setActresses] = useState([]);
   const [actors, setActors] = useState([]);
   const [allActors, setAllActors] = useState([]);
+  const [sortedActors, setSortedActors] = useState([]);
 
   useEffect(() => {
     getActresses();
     getActors();
   }, []);
 
+  // useEffect(() => {
+  //   if (actresses.length > 0 && actors.length > 0) {
+  //     setAllActors([...actresses, ...actors]);
+  //   }
+  // }, [actresses, actors]);
+
+  // useEffect(() => {
+  //   if (allActors.length > 0) {
+  //     setSortedActors(
+  //       [...allActors].sort((a, b) => a.name.localeCompare(b.name))
+  //     );
+  //   }
+  // }, [allActors]);
+
   useEffect(() => {
     if (actresses.length > 0 && actors.length > 0) {
-      setAllActors([...actresses, ...actors]);
+      const sorted = [...actresses, ...actors].sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+      setSortedActors(sorted);
     }
-  }, [actresses, actors]);
+  }, [actors, actresses]);
 
   function getActresses() {
     axios.get("https://lanciweb.github.io/demo/api/actresses/").then((e) => {
@@ -33,11 +51,11 @@ function App() {
   return (
     <>
       <div className="container mt-5 mb-5">
-        <h2>Actresses and actors</h2>
+        <h2 className="mb-3">Actresses and actors</h2>
 
-        {allActors.length ? (
+        {sortedActors.length ? (
           <div className="row row-cols-2 row-cols-lg-5 g-4">
-            {allActors.map(
+            {sortedActors.map(
               ({
                 id,
                 name,
