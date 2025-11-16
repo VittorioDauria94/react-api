@@ -34,32 +34,40 @@ function App() {
     <>
       <div className="container mt-5 mb-5">
         <h2>Actresses and actors</h2>
-        <div className="row row-cols-2 row-cols-lg-5 g-4">
-          {allActors.map(
-            ({
-              id,
-              name,
-              birth_year,
-              nationality,
-              awards,
-              biography,
-              image,
-              most_famous_movies,
-              known_for,
-            }) => (
-              <Card
-                key={`${name}-${id}`}
-                name={name}
-                birth={birth_year}
-                nationality={nationality}
-                awards={awards}
-                bio={biography}
-                src={image}
-                famousMovies={most_famous_movies || known_for}
-              />
-            )
-          )}
-        </div>
+
+        {allActors.length ? (
+          <div className="row row-cols-2 row-cols-lg-5 g-4">
+            {allActors.map(
+              ({
+                id,
+                name,
+                birth_year,
+                nationality,
+                awards,
+                biography,
+                image,
+                most_famous_movies,
+                known_for,
+              }) => (
+                <Card
+                  key={`${name}-${id}`}
+                  name={name}
+                  birth={birth_year}
+                  nationality={nationality}
+                  awards={awards}
+                  bio={biography}
+                  src={image}
+                  famousMovies={most_famous_movies || known_for}
+                />
+              )
+            )}
+          </div>
+        ) : (
+          <div className="d-flex align-items-center">
+            <strong role="status">Loading...</strong>
+            <div className="spinner-border ms-auto" aria-hidden="true"></div>
+          </div>
+        )}
       </div>
     </>
   );
