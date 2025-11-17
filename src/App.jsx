@@ -8,10 +8,10 @@ function App() {
   const [allActors, setAllActors] = useState([]);
   const [sortedActors, setSortedActors] = useState([]);
 
-  useEffect(() => {
-    getActresses();
-    getActors();
-  }, []);
+  // useEffect(() => {
+  //   getActresses();
+  //   getActors();
+  // }, []);
 
   // useEffect(() => {
   //   if (actresses.length > 0 && actors.length > 0) {
@@ -27,31 +27,49 @@ function App() {
   //   }
   // }, [allActors]);
 
+  // useEffect(() => {
+  //   if (actresses.length > 0 && actors.length > 0) {
+  //     const sorted = [...actresses, ...actors].sort((a, b) =>
+  //       a.name.localeCompare(b.name)
+  //     );
+  //     setSortedActors(sorted);
+  //   }
+  // }, [actors, actresses]);
+
   useEffect(() => {
-    if (actresses.length > 0 && actors.length > 0) {
-      const sorted = [...actresses, ...actors].sort((a, b) =>
+    Promise.all([
+      axios.get("https://lanciweb.github.io/demo/api/actresses/"),
+      axios.get("https://lanciweb.github.io/demo/api/actors/"),
+    ]).then(([actressesResp, actorsResp]) => {
+      const actressesData = actressesResp.data;
+      const actorsData = actorsResp.data;
+
+      const sorted = [...actressesData, ...actorsData].sort((a, b) =>
         a.name.localeCompare(b.name)
       );
+
       setSortedActors(sorted);
-    }
-  }, [actors, actresses]);
-
-  function getActresses() {
-    axios.get("https://lanciweb.github.io/demo/api/actresses/").then((e) => {
-      setActresses(e.data);
     });
-  }
+  }, []);
 
-  function getActors() {
-    axios.get("https://lanciweb.github.io/demo/api/actors/").then((e) => {
-      setActors(e.data);
-    });
-  }
+  // function getActresses() {
+  //   axios.get("https://lanciweb.github.io/demo/api/actresses/").then((e) => {
+  //     setActresses(e.data);
+  //   });
+  // }
+
+  // function getActors() {
+  //   axios.get("https://lanciweb.github.io/demo/api/actors/").then((e) => {
+  //     setActors(e.data);
+  //   });
+  // }
 
   return (
     <>
       <div className="container mt-5 mb-5">
-        <h2 className="mb-3">Actresses and actors</h2>
+        <h2 className="mb-4 text-center fw-bold">
+          🎬 Actresses & Actors Database
+        </h2>
 
         {sortedActors.length ? (
           <div className="row row-cols-2 row-cols-lg-5 g-4">
@@ -81,9 +99,9 @@ function App() {
             )}
           </div>
         ) : (
-          <div className="d-flex align-items-center">
-            <strong role="status">Loading...</strong>
-            <div className="spinner-border ms-auto" aria-hidden="true"></div>
+          <div className="d-flex justify-content-center align-items-center mt-5">
+            <div className="spinner-border me-2" role="status"></div>
+            <span className="fw-semibold">Loading actors...</span>
           </div>
         )}
       </div>

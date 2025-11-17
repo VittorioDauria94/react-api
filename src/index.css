@@ -1,0 +1,33 @@
+/* === CARD CUSTOM STYLING === */
+
+.actor-card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.actor-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+}
+
+/* Image */
+.actor-img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+}
+
+.actor-body h5 {
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+/* Small text */
+.actor-text {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
