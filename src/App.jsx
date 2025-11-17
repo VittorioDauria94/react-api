@@ -3,46 +3,20 @@ import { useEffect, useState } from "react";
 import Card from "./components/Card";
 
 function App() {
-  const [actresses, setActresses] = useState([]);
-  const [actors, setActors] = useState([]);
-  const [allActors, setAllActors] = useState([]);
   const [sortedActors, setSortedActors] = useState([]);
-
-  // useEffect(() => {
-  //   getActresses();
-  //   getActors();
-  // }, []);
-
-  // useEffect(() => {
-  //   if (actresses.length > 0 && actors.length > 0) {
-  //     setAllActors([...actresses, ...actors]);
-  //   }
-  // }, [actresses, actors]);
-
-  // useEffect(() => {
-  //   if (allActors.length > 0) {
-  //     setSortedActors(
-  //       [...allActors].sort((a, b) => a.name.localeCompare(b.name))
-  //     );
-  //   }
-  // }, [allActors]);
-
-  // useEffect(() => {
-  //   if (actresses.length > 0 && actors.length > 0) {
-  //     const sorted = [...actresses, ...actors].sort((a, b) =>
-  //       a.name.localeCompare(b.name)
-  //     );
-  //     setSortedActors(sorted);
-  //   }
-  // }, [actors, actresses]);
 
   useEffect(() => {
     Promise.all([
       axios.get("https://lanciweb.github.io/demo/api/actresses/"),
       axios.get("https://lanciweb.github.io/demo/api/actors/"),
     ]).then(([actressesResp, actorsResp]) => {
-      const actressesData = actressesResp.data;
-      const actorsData = actorsResp.data;
+      const actressesData = addKey(
+        actressesResp.data,
+        "famousMovies",
+        "most_famous_movies"
+      );
+
+      const actorsData = addKey(actorsResp.data, "famousMovies", "known_for");
 
       const sorted = [...actressesData, ...actorsData].sort((a, b) =>
         a.name.localeCompare(b.name)
@@ -52,17 +26,12 @@ function App() {
     });
   }, []);
 
-  // function getActresses() {
-  //   axios.get("https://lanciweb.github.io/demo/api/actresses/").then((e) => {
-  //     setActresses(e.data);
-  //   });
-  // }
-
-  // function getActors() {
-  //   axios.get("https://lanciweb.github.io/demo/api/actors/").then((e) => {
-  //     setActors(e.data);
-  //   });
-  // }
+  const addKey = (array, newKey, oldKey) =>
+    array.map((item) => {
+      const newItem = { ...item, [newKey]: item[oldKey] };
+      delete newItem[oldKey];
+      return newItem;
+    });
 
   return (
     <>
@@ -82,8 +51,7 @@ function App() {
                 awards,
                 biography,
                 image,
-                most_famous_movies,
-                known_for,
+                famousMovies,
               }) => (
                 <Card
                   key={`${name}-${id}`}
@@ -93,7 +61,7 @@ function App() {
                   awards={awards}
                   bio={biography}
                   src={image}
-                  famousMovies={most_famous_movies || known_for}
+                  famousMovies={famousMovies}
                 />
               )
             )}
